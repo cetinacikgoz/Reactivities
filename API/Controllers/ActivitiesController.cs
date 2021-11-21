@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
+    [AllowAnonymous]
     public class ActivitiesController : BaseApiController
     {
         //MediatR is defined in the base
