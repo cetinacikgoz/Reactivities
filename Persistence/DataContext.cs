@@ -10,5 +10,27 @@ namespace Persistence
         {
         }
         public DbSet<Activity> Activities { get; set; }
+
+
+        // many to many relationship configuration
+        public DbSet<ActivityAttendee> ActivityAttendees { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            // AppUserId and ActivityId fields are the keys on ActivityAttendee table
+            builder.Entity<ActivityAttendee>(x => x.HasKey(aa => new { aa.AppUserId, aa.ActivityId }));
+            
+            builder.Entity<ActivityAttendee>()
+                .HasOne(u => u.AppUser)
+                .WithMany(a => a.Activities)
+                .HasForeignKey(aa => aa.AppUserId);
+
+            builder.Entity<ActivityAttendee>()
+                .HasOne(u => u.Activity)
+                .WithMany(a => a.Attendees)
+                .HasForeignKey(aa => aa.ActivityId);
+        }
     }
 }
